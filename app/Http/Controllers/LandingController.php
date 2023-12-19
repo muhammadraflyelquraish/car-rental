@@ -4,33 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Models\Car;
 use App\Models\Customer;
+use App\Models\Driver;
+use App\Models\DriverStatus;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
+use DateTime;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
     function home()
     {
-        $latestCars = Car::with('brand', 'accessories', 'images')
+        $latestCars = Car::with('brand', 'images')
             ->latest()
             ->take(4)
             ->get();
 
-        $activeOrder = "";
+        $activeOrder = [];
         if (auth()->user()) {
             $activeOrder = Order::with('car', 'user', 'payment')
                 ->where('user_id', auth()->user()->id)
                 ->whereIn('order_status', [
                     OrderStatus::WAITING_FOR_PAYMENT,
-                    OrderStatus::ON_GOING,
-                    OrderStatus::WAITING_FOR_PICKUP
+                    OrderStatus::WAITING_FOR_PICKUP,
+                    OrderStatus::ON_GOING
                 ])
                 ->latest()
                 ->first();
         }
-        return view('landing.home', compact('latestCars', 'activeOrder'));
+
+        $rentedCars = Order::with('car')
+            ->whereIn('order_status', [
+                OrderStatus::WAITING_FOR_PAYMENT,
+                OrderStatus::WAITING_FOR_PICKUP,
+                OrderStatus::ON_GOING
+            ])
+            ->get();
+
+        return view('landing.home', compact('latestCars', 'activeOrder', 'rentedCars'));
     }
 
     function aboutUs()
@@ -44,7 +56,15 @@ class LandingController extends Controller
             ->with('brand', 'images', 'accessories')
             ->paginate(12);
 
-        return view('landing.list-cars', compact('cars'));
+        $rentedCars = Order::with('car')
+            ->whereIn('order_status', [
+                OrderStatus::WAITING_FOR_PAYMENT,
+                OrderStatus::WAITING_FOR_PICKUP,
+                OrderStatus::ON_GOING
+            ])
+            ->get();
+
+        return view('landing.list-cars', compact('cars', 'rentedCars'));
     }
 
     function carDetail($carId)
@@ -54,9 +74,11 @@ class LandingController extends Controller
             ->load('images')
             ->load('accessories');
 
+        $drivers = Driver::where('status', DriverStatus::getStringValue(DriverStatus::ACTIVE))->get();
+
         $payment_methods = PaymentMethod::get();
 
-        return view('landing.car-details', compact('car', 'payment_methods'));
+        return view('landing.car-details', compact('car', 'payment_methods', 'drivers'));
     }
 
     function contactUs()

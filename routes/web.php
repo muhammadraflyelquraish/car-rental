@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     UserController,
     CarController,
     CheckoutController,
+    DriverController,
     LandingController,
     OrderController
 };
@@ -44,7 +45,12 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('/brand', BrandController::class);
+    Route::get('/driver/data', [DriverController::class, "getData"])->name('driver.data');
+    Route::resource('/driver', DriverController::class);
     Route::resource('/customer', CustomerController::class);
+    Route::get('/order/export', [OrderController::class, 'export'])->name('order.export');
+    Route::put('/order/{order}/ongoing', [OrderController::class, 'ongoingOrder'])->name('order.ongoing');
+    Route::put('/order/{order}/finish', [OrderController::class, 'finishOrder'])->name('order.finish');
     Route::resource('/order', OrderController::class);
     Route::resource('/user', UserController::class);
     Route::get('/car/data', [CarController::class, 'data'])->name('car.data');

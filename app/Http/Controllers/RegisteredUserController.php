@@ -119,7 +119,7 @@ class RegisteredUserController extends Controller
 
         $customer->update([
             'address' => $request->address,
-            'status_approval' => StatusApproval::ON_PROCCESS,
+            'status_approval' => StatusApproval::getStringValue(StatusApproval::ON_PROCCESS),
             'ktp_image' => $KTPImage ? $KTPImage : $customer->ktp_image,
             'sim_image' => $SIMImage ? $SIMImage : $customer->sim_image,
         ]);

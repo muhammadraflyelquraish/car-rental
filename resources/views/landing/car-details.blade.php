@@ -149,7 +149,23 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="label">Jam Penjemputan</label>
+                                    <label for="" class="label">Menggunakan Driver?</label>
+                                    <select id="use_driver" class="form-control" required>
+                                        <option value="Tidak" selected>Tidak</option>
+                                        <option value="Ya">Ya</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="label" hidden>Driver</label>
+                                    <select name="driver_id" id="driver_id" class="form-control" hidden>
+                                        <option value="">-- Pilih Driver --</option>
+                                        @foreach($drivers as $driver)
+                                        <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="label">Jam Pengambilan & Pengembalian</label>
                                     <input type="time" class="form-control" name="pickup_time" id="pickup_time" placeholder="Waktu" required value="">
                                 </div>
                                 <div class="form-group">
@@ -181,7 +197,7 @@
                                     <input type="hidden" class="form-control" name="grand_total" id="grand_total" readonly value="0">
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Rental Sekarang" class="btn btn-secondary py-3 px-4">
+                                    <button type="submit" class="btn btn-secondary py-3 px-4">Rental Sekarang</button>
                                 </div>
                             </form>
                         </div>
@@ -221,6 +237,19 @@
                 alert('Tanggal Selesai tidak boleh kurang dari waktu mulai')
             }
         }
+
+        $(document).on('change', '#use_driver', function(e) {
+            let val = $(this).val()
+            if (val == 'Ya') {
+                $('#driver_id').prop('hidden', false)
+                $('#driver_id').prop('required', true)
+                $('#driver_id').prev().prop('hidden', false)
+            } else {
+                $('#driver_id').prop('hidden', true)
+                $('#driver_id').prop('required', false)
+                $('#driver_id').prev().prop('hidden', true)
+            }
+        })
 
         $(document).on('change', '#start_date', function(e) {
             let currentTime = new Date();

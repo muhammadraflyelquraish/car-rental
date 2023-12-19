@@ -12,6 +12,17 @@ enum OrderStatus: string
     case ON_GOING = 'On Going';
     case FINISHED = 'Finished';
     case CANCELED = 'Canceled';
+
+    public static function getStringValue(OrderStatus $status): string
+    {
+        return match ($status) {
+            self::WAITING_FOR_PAYMENT => 'Waiting For Payment',
+            self::WAITING_FOR_PICKUP => 'Waiting for Pickup',
+            self::ON_GOING => 'On Going',
+            self::FINISHED => 'Finished',
+            self::CANCELED => 'Canceled',
+        };
+    }
 }
 
 class Order extends Model
@@ -22,16 +33,13 @@ class Order extends Model
         'order_number',
         'car_id',
         'user_id',
+        'driver_id',
         'pickup_location',
         'dropoff_location',
         'start_date',
         'end_date',
         'pickup_time',
         'order_status'
-    ];
-
-    protected $casts = [
-        'order_status' => OrderStatus::class
     ];
 
     function car()

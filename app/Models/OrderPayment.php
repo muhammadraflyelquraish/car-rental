@@ -28,10 +28,6 @@ class OrderPayment extends Model
         'note'
     ];
 
-    protected $casts = [
-        'payment_status' => PaymentStatus::class
-    ];
-
     function order()
     {
         return $this->belongsTo(Order::class);

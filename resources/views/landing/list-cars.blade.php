@@ -29,10 +29,18 @@
                             <span class="cat">{{ $car->brand->name }}</span>
                             <p class="price ml-auto">{{ number_format($car->price_per_day, 0) }} <span>/hari</span></p>
                         </div>
-                        @if($loop->index != 1)
-                        <p class="d-flex mb-0 d-block"><a href="{{ route('car-detail', $car->id) }}" class="btn btn-primary py-2 mr-1">Sewa Sekarang</a> </p>
+
+                        @if(count($rentedCars) > 0)
+                        @foreach($rentedCars as $j => $rCar)
+                        @if($car->id == $rCar->car_id)
+                        <p class="d-flex mb-0 d-block"><span class="btn btn-danger py-2 mr-1">Sedang Rental</span> <small>Tersedia pada: <br> {{ date('d M Y', strtotime($rCar->end_date)) }} - {{ date('H:i', strtotime($rCar->pickup_time)) }}</small></p>
+                        @break
                         @else
-                        <p class="d-flex mb-0 d-block"><a href="{{ route('car-detail', $car->id) }}" class="btn btn-danger py-2 mr-1">Sedang Rental</a> <small>Tersedia pada: <br> 23 Okt 2023</small></p>
+                        <p class="d-flex mb-0 d-block"><a href="{{ route('car-detail', $car->id) }}" class="btn btn-primary py-2 mr-1">Sewa Sekarang</a> </p>
+                        @endif
+                        @endforeach
+                        @else
+                        <p class="d-flex mb-0 d-block"><a href="{{ route('car-detail', $car->id) }}" class="btn btn-primary py-2 mr-1">Sewa Sekarang</a> </p>
                         @endif
                     </div>
                 </div>

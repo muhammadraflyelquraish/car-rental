@@ -9,6 +9,7 @@ use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use App\Models\PaymentStatus;
 use App\Models\StatusApproval;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -40,8 +41,7 @@ class CheckoutController extends Controller
             return redirect()->route('home')->with('failed', 'Anda sedang melakukan rental');
         }
 
-        $last_order = Order::latest()->first();
-        $order_number = $last_order ? sprintf('OR%06s', substr($last_order->order_number, 3) + 1) : 'OR000005';
+        $order_number = "RBO" . DateTime::createFromFormat('U.u', microtime(true))->format("ymdHisu");
 
         $order = DB::transaction(function () use ($request, $order_number) {
             $payment_method = PaymentMethod::find($request->payment_method_id);
@@ -50,6 +50,7 @@ class CheckoutController extends Controller
                 'order_number' => $order_number,
                 'car_id' => $request->car_id,
                 'user_id' => $request->user_id,
+                'driver_id' => $request->driver_id,
                 'pickup_location' => $request->pick_up_location,
                 'dropoff_location' => $request->drop_off_location,
                 'start_date' => $request->start_date,

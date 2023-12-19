@@ -35,7 +35,7 @@
                                         <th colspan="2">Mobil</th>
                                         <th class="text-center">Tanggal Mulai</th>
                                         <th class="text-center">Tanggal Selesai</th>
-                                        <th class="text-center">Waktu Pengambilan</th>
+                                        <th class="text-center">Waktu</th>
                                         <th class="text-center">Status</th>
                                         <td class="text-center"></td>
                                     </tr>
@@ -56,10 +56,9 @@
                                         <td class="text-center">{{ $activeOrder->pickup_time }}</td>
                                         <td class="text-center">{{ $activeOrder->order_status }}</td>
                                         <td class="text-center">
-
                                             @if($activeOrder->order_status == 'Waiting For Payment')
 
-                                            <a class="btn btn-primary btn-sm" href="{{ route('checkout.show', $activeOrder->id) }}">Detail</a>
+                                            <a class="btn btn-primary btn-sm" href="{{ route('checkout.show', $activeOrder->id) }}">Detail</a> <br>
 
                                             @foreach($activeOrder->payment->actions as $action)
                                             @if($action->name == 'cancel')
@@ -73,7 +72,6 @@
                                             @endforeach
 
                                             @endif
-
                                         </td>
                                     </tr>
                                 </tbody>
@@ -224,11 +222,20 @@
                                     <span class="cat">{{ $car->brand->name }}</span>
                                     <p class="price ml-auto">{{ number_format($car->price_per_day, 0) }} <span>/hari</span></p>
                                 </div>
-                                @if($loop->index != 1)
-                                <p class="d-flex mb-0 d-block"><a href="{{ route('car-detail', $car->id) }}" class="btn btn-primary py-2 mr-1">Sewa Sekarang</a> </p>
+
+                                @if(count($rentedCars) > 0)
+                                @foreach($rentedCars as $j => $rCar)
+                                @if($car->id == $rCar->car_id)
+                                <p class="d-flex mb-0 d-block"><span class="btn btn-danger py-2 mr-1">Sedang Rental</span> <small>Tersedia pada: <br> {{ date('d M Y', strtotime($rCar->end_date)) }} - {{ date('H:i', strtotime($rCar->pickup_time)) }}</small></p>
+                                @break
                                 @else
-                                <p class="d-flex mb-0 d-block"><a href="{{ route('car-detail', $car->id) }}" class="btn btn-danger py-2 mr-1">Sedang Rental</a> <small>Tersedia pada: <br> 23-07-2023</small></p>
+                                <p class="d-flex mb-0 d-block"><a href="{{ route('car-detail', $car->id) }}" class="btn btn-primary py-2 mr-1">Sewa Sekarang</a> </p>
                                 @endif
+                                @endforeach
+                                @else
+                                <p class="d-flex mb-0 d-block"><a href="{{ route('car-detail', $car->id) }}" class="btn btn-primary py-2 mr-1">Sewa Sekarang</a> </p>
+                                @endif
+
                             </div>
                         </div>
                     </div>
@@ -387,7 +394,10 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(response) {
-                        window.location.reload()
+                        location.reload();
+                    },
+                    error: function(err) {
+                        location.reload();
                     },
                 })
             }

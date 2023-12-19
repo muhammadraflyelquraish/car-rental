@@ -3,10 +3,10 @@
 @section('content')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Detail Customer</h2>
+        <h2>Detail Driver</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <span><a href="{{ route('customer.index') }}"><u>Customer</u></a></span>
+                <span><a href="{{ route('driver.index') }}"><u>Driver</u></a></span>
             </li>
             <li class="breadcrumb-item active">
                 <strong>Detail</strong>
@@ -22,7 +22,7 @@
                 <div class="ibox-title">
                     <h5>Data Customer</h5>
                 </div>
-                <form action="{{ route('customer.update', $customer->id) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('driver.update', $driver->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
 
@@ -30,33 +30,27 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label">Nama Lengkap</label>
                             <div class="col-md-9">
-                                <input type="text" name="fullname" class="form-control" required value="{{ $customer->user->fullname }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label">Email</label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" required readonly value="{{ $customer->user->email }}">
+                                <input type="text" name="name" class="form-control" required value="{{ $driver->name }}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label">Nomor Telepon</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" required readonly value="{{ $customer->phone_number }}">
+                                <input type="text" class="form-control" name="phone_number" required value="{{ $driver->phone_number }}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label">Alamat</label>
                             <div class="col-md-9">
-                                <textarea name="address" class="form-control" required rows="2">{{ $customer->address }}</textarea>
+                                <textarea name="address" class="form-control" required rows="2">{{ $driver->address }}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label">KTP</label>
                             <div class="col-md-9">
                                 <input type="file" name="ktp_image" class="form-control">
-                                <a href="{{ asset('identity') }}/{{ $customer->ktp_image }}" target="_blank" data-gallery="">
-                                    <img src="{{ asset('identity') }}/{{ $customer->ktp_image }}" width="150" height="150">
+                                <a href="{{ asset('identity') }}/{{ $driver->ktp_image }}" target="_blank" data-gallery="">
+                                    <img src="{{ asset('identity') }}/{{ $driver->ktp_image }}" width="150" height="150">
                                 </a>
                             </div>
                         </div>
@@ -64,8 +58,8 @@
                             <label class="col-md-3 col-form-label">SIM</label>
                             <div class="col-md-9">
                                 <input type="file" name="sim_image" class="form-control">
-                                <a href="{{ asset('identity') }}/{{ $customer->sim_image }}" target="_blank" data-gallery="">
-                                    <img src="{{ asset('identity') }}/{{ $customer->sim_image }}" width="150" height="150">
+                                <a href="{{ asset('identity') }}/{{ $driver->sim_image }}" target="_blank" data-gallery="">
+                                    <img src="{{ asset('identity') }}/{{ $driver->sim_image }}" width="150" height="150">
                                 </a>
                             </div>
                         </div>
@@ -74,42 +68,26 @@
                             <div class="col-md-9">
                                 <fieldset>
                                     <div class="form-check abc-checkbox abc-checkbox">
-                                        @if($customer->status_approval == 'On Procces')
-                                        <input class="form-check-input" type="radio" name="status_approval" value="On Procces" checked=>
+                                        @if($driver->status == 'Active')
+                                        <input class="form-check-input" type="radio" name="status" value="Active" checked=>
                                         @else
-                                        <input class="form-check-input" type="radio" name="status_approval" value="On Procces">
+                                        <input class="form-check-input" type="radio" name="status" value="Active">
                                         @endif
                                         <label class="form-check-label">
-                                            Proccess
+                                            Active
                                         </label>
                                     </div>
                                     <div class="form-check abc-checkbox abc-checkbox-success">
-                                        @if($customer->status_approval == 'Approved')
-                                        <input class="form-check-input" type="radio" name="status_approval" value="Approved" checked=>
+                                        @if($driver->status == 'Nonactive')
+                                        <input class="form-check-input" type="radio" name="status" value="Nonactive" checked=>
                                         @else
-                                        <input class="form-check-input" type="radio" name="status_approval" value="Approved">
+                                        <input class="form-check-input" type="radio" name="status" value="Nonactive">
                                         @endif
                                         <label class="form-check-label">
-                                            Approve
-                                        </label>
-                                    </div>
-                                    <div class="form-check abc-checkbox abc-checkbox-danger">
-                                        @if($customer->status_approval == 'Rejected')
-                                        <input class="form-check-input" type="radio" name="status_approval" value="Rejected" checked=>
-                                        @else
-                                        <input class="form-check-input" type="radio" name="status_approval" value="Rejected">
-                                        @endif
-                                        <label class="form-check-label">
-                                            Reject
+                                            Nonactive
                                         </label>
                                     </div>
                                 </fieldset>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label">Note</label>
-                            <div class="col-md-9">
-                                <textarea name="note" class="form-control" rows="2">{{ $customer->note }}</textarea>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>

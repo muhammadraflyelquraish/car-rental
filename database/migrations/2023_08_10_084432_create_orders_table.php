@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('order_number');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('car_id')->constrained();
+            $table->foreignId('driver_id')->nullable()->constrained();
             $table->string('pickup_location')->nullable();
             $table->string('dropoff_location')->nullable();
             $table->date('start_date');

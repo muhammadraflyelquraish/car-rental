@@ -39,8 +39,20 @@
                 <a href="{{ route('customer.index') }}"><i class="fa fa-users"></i> <span class="nav-label">Customer</span></a>
             </li>
 
-            <li class="{{ request()->routeIs('brand.index') }}">
-                <a href="{{ route('brand.index') }}"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Pemesanan</span></a>
+            <li class="{{( 
+                    request()->routeIs('driver.index') OR
+                    request()->routeIs('driver.create') OR
+                    request()->routeIs('driver.show') 
+                ) ? 'active' : '' }}
+                ">
+                <a href="{{ route('driver.index') }}"><i class="fa fa-user"></i> <span class="nav-label">Driver</span></a>
+            </li>
+
+            <li class="{{( 
+                    request()->routeIs('order.index') OR
+                    request()->routeIs('order.show')
+                ) ? 'active' : ''}}">
+                <a href="{{ route('order.index') }}"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Pemesanan</span></a>
             </li>
 
             <li class="{{ request()->routeIs('user.index') ? 'active' : '' }}">
